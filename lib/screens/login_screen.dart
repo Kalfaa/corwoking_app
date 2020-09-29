@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'home.dart';
+
 final storage = new FlutterSecureStorage();
 
 class LoginScreen extends StatefulWidget {
@@ -61,12 +63,12 @@ class _LoginScreenState extends State<LoginScreen> {
       try {
         var user = await Auth.login(_username, _password);
         var token = user['token']['access_token'];
-        //await storage.write(key: "token", value: "Bearer " + token);
+        await storage.write(key: "token", value: "Bearer " + token);
         FlushBarMessage.goodMessage(content: 'connection reussis').showFlushBar(context);
-        /*Navigator.pushAndRemoveUntil(
+        Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (BuildContext context) => Photo()),
-                (Route<dynamic> route) => false);*/
+            MaterialPageRoute(builder: (BuildContext context) => Home(title: 'Coworking')),
+                (Route<dynamic> route) => false);
       } catch (e) {
         print(e);
         FlushBarMessage.errorMessage(content: "Nom d'utilisateur ou mot de passe incorrect").showFlushBar(context);
@@ -74,7 +76,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
-
 
 
   Widget _buildPasswordTF() {
