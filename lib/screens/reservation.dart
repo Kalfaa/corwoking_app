@@ -200,15 +200,26 @@ class _Reservation extends State<ReservationScreen> {
 
   void _startHourChanged(TimeOfDay hour) {
     print(hour.hour);
-    print(available.availableHour[hour.hour.toString()]);
     if(available.availableHour[hour.hour.toString()] == openSpaceSelected.rooms.length){
       return;
     }
     showToTP=true;
+    var possibleEnd =  findNextHourAvailable(hour.hour,available.availableHour);
+    toEndTP = TimeOfDay(hour: possibleEnd, minute: 00);
     setState(() => toStartTP = hour.add(minutes: 60));
   }
 
   void _endHourChanged(TimeOfDay hour) {
+  }
+
+  findNextHourAvailable(start,availableHour) {
+    while(start<21){
+      start++;
+      if(available.availableHour[start.toString()] == openSpaceSelected.rooms.length){
+        return start;
+      }
+    }
+    return 22;
   }
 
 

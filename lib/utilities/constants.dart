@@ -30,6 +30,7 @@ class Utilities{
       for(Object element in map){
           list.add(convert(element));
       }
+      return list;
   }
 }
 

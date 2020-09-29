@@ -12,8 +12,8 @@ class OpenSpace {
      openSpace.id = map['id'];
      openSpace.description = map['description'];
      openSpace.name = map['name'];
-     openSpace.rooms = Utilities.convertArray(map['rooms'],Room.convert);
-     openSpace.tools = Utilities.convertArray(map['tools'],Tool.convert);
+     openSpace.rooms = new List<Room>.from(Utilities.convertArray(map['rooms'],Room.convert));
+     openSpace.tools = new List<Tool>.from(Utilities.convertArray(map['tools'],Tool.convert));
      return openSpace;
   }
 
@@ -100,7 +100,7 @@ class Available {
   static dynamic convert(Map map){
     print(map);
     Available available = new Available();
-    available.reservations = Utilities.convertArray(map['reservations'],Reservation.convert);
+    available.reservations =  new List<Reservation>.from(Utilities.convertArray(map['reservations'],Reservation.convert));
     available.availableHour = map['availableHour'];
     return available;
   }
