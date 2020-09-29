@@ -15,12 +15,18 @@ class ReservationScreen extends StatefulWidget {
 
 class _Reservation extends State<ReservationScreen> {
   DateTime pickeDate;
-  List<S2Choice<String>> options = [];
+  List<S2Choice<OpenSpace>> options = [];
   List<OpenSpace> openSpacesList = [];
   List<Reservation> availableReservation= [];
-  String value = 'OpenSpace';
+  Available available;
+  OpenSpace openSpaceSelected;
   bool showFromTP = false;
   bool showToTP = false;
+  var hourArray = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'];
+  var availableHour= {8:{"available":false},9:{"available":false},10:{"available":false},11:{"available":false},12:{"available":false},13:{"available":false},14:{"available":false},
+    15:{"available":false},16:{"available":false},17:{"available":false},18:{"available":false},19:{"available":false},20:{"available":false},21:{"available":false}};
+
+
   TimeOfDay fromStartTP = TimeOfDay(hour: 8, minute: 00);
   TimeOfDay fromEndTP = TimeOfDay(hour: 21, minute: 00);
 
@@ -49,10 +55,11 @@ class _Reservation extends State<ReservationScreen> {
       setState((){
         pickeDate = date;
       });
-      if(value!='OpenSpace'){
+      if(openSpaceSelected!=null){
         print("getAvailable");
-        var availableJSON = await ReservationService.getAvailable(value, pickeDate.toString());
-        Available available = Available.convert(availableJSON);
+        var availableJSON = await ReservationService.getAvailable(openSpaceSelected.id, pickeDate.toString());
+        available = Available.convert(availableJSON);
+
         showFromTP = true;
         setState(() {
 
@@ -67,11 +74,11 @@ class _Reservation extends State<ReservationScreen> {
         appBar: AppBar( backgroundColor: PRIMARY_COLOR,title: Text("Reservation")),
         body:Column(children:[
           Flexible(
-          child:SmartSelect<String>.single(
+          child:SmartSelect<OpenSpace>.single(
             title: 'Openspace',
-            value: value,
+            value: openSpaceSelected,
             choiceItems: options,
-            onChange: (state) => setState(() => value = state.value)
+            onChange: (state) => setState(() => openSpaceSelected = state.value)
         ),
           ),
           Flexible(
@@ -187,18 +194,26 @@ class _Reservation extends State<ReservationScreen> {
     for (var openSpaceJSON in openSpaces){
       OpenSpace openSpace = OpenSpace.convert(openSpaceJSON);
       openSpacesList.add(openSpace);
-      options.add(S2Choice<String>(value: openSpace.id, title: openSpace.name));
+      options.add(S2Choice<OpenSpace>(value: openSpace, title: openSpace.name));
     }
   }
 
   void _startHourChanged(TimeOfDay hour) {
+    print(hour.hour);
+    print(available.availableHour[hour.hour.toString()]);
+    if(available.availableHour[hour.hour.toString()] == openSpaceSelected.rooms.length){
+      return;
+    }
     showToTP=true;
     setState(() => toStartTP = hour.add(minutes: 60));
   }
 
   void _endHourChanged(TimeOfDay hour) {
   }
+
+
 }
+
 
 
 

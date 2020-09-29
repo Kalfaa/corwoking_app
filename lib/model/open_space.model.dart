@@ -16,6 +16,14 @@ class OpenSpace {
      openSpace.tools = Utilities.convertArray(map['tools'],Tool.convert);
      return openSpace;
   }
+
+  static returnByID(List<OpenSpace> openSpaces,String id){
+    for (OpenSpace openSpace in openSpaces){
+      if(id==openSpace.id){
+        return openSpace;
+      }
+    }
+  }
 }
 
 class OpenSpaceId{
