@@ -28,19 +28,19 @@ class ReservationService {
   }
 
 
-  static dynamic create(String token) async{
+  static dynamic create( Map<String,dynamic> reservationCreation) async{
     var response;
     response = await http.post(URL_API+"/"+base+"/",
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: await storage.read(key: "token")
-      },
+      },body:jsonEncode(reservationCreation)
     );
     //print(response.body);
-    if (response.statusCode == 200) {
-      final responseJson = json.decode(response.body);
-      return responseJson;
+    if (response.statusCode == 201) {
+      return ;
     } else {
+      print(json.decode(response.body));
       throw Exception('Erreur create');
     }
   }
@@ -53,7 +53,6 @@ class ReservationService {
         HttpHeaders.authorizationHeader: await storage.read(key: "token")
       },
     );
-    print(response.body);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
       return responseJson;

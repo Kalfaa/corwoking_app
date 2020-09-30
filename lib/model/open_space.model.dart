@@ -1,4 +1,6 @@
 import 'package:corwoking_app/utilities/constants.dart';
+import 'package:enum_to_string/enum_to_string.dart';
+
 
 class OpenSpace {
   String id;
@@ -66,8 +68,10 @@ class Tool {
     Tool openSpace = new Tool();
     openSpace.id = map['id'];
     openSpace.name = map['name'];
+    openSpace.type = EnumToString.fromString(ToolType.values,map['type']);
     return openSpace;
   }
+
 }
 
 
@@ -87,10 +91,12 @@ class Reservation {
     reservation.end = DateTime.parse(map['end']);
     reservation.food = map['food'];
     reservation.room = Room.convert(map['room']);
-    reservation.tools = Utilities.convertArray(map['tools'],Tool.convert);
+    reservation.tools =  new List<Tool>.from(Utilities.convertArray(map['tools'],Tool.convert));
     reservation.user = map['user']['id'];
     return reservation;
   }
+
+
 }
 
 class Available {
@@ -98,10 +104,43 @@ class Available {
   var availableHour;
 
   static dynamic convert(Map map){
-    print(map);
     Available available = new Available();
     available.reservations =  new List<Reservation>.from(Utilities.convertArray(map['reservations'],Reservation.convert));
     available.availableHour = map['availableHour'];
     return available;
+  }
+
+}
+
+class SortedTool{
+    List<Tool> laptops = [];
+    List<Tool> printers = [];
+    List<Tool> others = [];
+
+    static dynamic fromListTool(List<Tool> tools){
+      SortedTool res = new SortedTool();
+      for(Tool tool in tools){
+        if(tool.type == ToolType.LAPTOP){
+          res.laptops.add(tool);
+        }else if(tool.type == ToolType.PRINTER){
+          res.printers.add(tool);
+        }else if(tool.type == ToolType.TOOL){
+          res.others.add(tool);
+        }
+      }
+      return res;
+    }
+}
+
+class ReservationCreation {
+  String start;
+  String end;
+  int food;
+  String room;
+  List<String> tools;
+
+  toJson(){
+    Map<String,dynamic> json={'start':start,'end':end,'food':food,'room':room,'tools':tools};
+    return json;
   }
 }
