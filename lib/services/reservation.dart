@@ -10,7 +10,7 @@ String base = "reservation";
 class ReservationService {
 
 
-  static dynamic read(String token) async {
+  static dynamic read() async {
     var response;
     response = await http.get(URL_API+"/"+base+"/",
       headers: <String, String>{
@@ -61,16 +61,34 @@ class ReservationService {
     }
   }
 
-  static dynamic addToolToReservation(String reservationId) async{
+  static dynamic changeFood(String reservationId, int foodNumber) async{
+    var response;
+    response = await http.post("$URL_API/reservation/$reservationId/changeFood/",
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: await storage.read(key: "token")
+      },body:jsonEncode({'food':foodNumber}),
+    );
+    //print(response.body);
+    if (response.statusCode == 201) {
+      final responseJson = json.decode(response.body);
+      return responseJson;
+    } else {
+      throw Exception('Erreur changeFood');
+    }
+  }
+
+
+  static dynamic addToolToReservation(String reservationId, List<String> toolsId) async{
     var response;
     response = await http.post("$URL_API/reservation/$reservationId/addTools/",
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: await storage.read(key: "token")
-      },
+      },body:jsonEncode({'tools':toolsId}),
     );
-    print(response.body);
-    if (response.statusCode == 200) {
+    //print(response.body);
+    if (response.statusCode == 201) {
       final responseJson = json.decode(response.body);
       return responseJson;
     } else {
@@ -78,16 +96,16 @@ class ReservationService {
     }
   }
 
-  static dynamic removeToolsToReservation(String reservationId) async{
+  static dynamic removeToolsToReservation(String reservationId, List<String> toolsId) async{
     var response;
     response = await http.post("$URL_API/reservation/$reservationId/removeTools/",
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: await storage.read(key: "token")
-      },
+      },body:jsonEncode({'tools':toolsId})
     );
-    print(response.body);
-    if (response.statusCode == 200) {
+    //print(response.body);
+    if (response.statusCode == 201) {
       final responseJson = json.decode(response.body);
       return responseJson;
     } else {

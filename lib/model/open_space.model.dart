@@ -30,10 +30,11 @@ class OpenSpace {
 
 class OpenSpaceId{
   String id;
-
+  String name;
   static dynamic convert(Map map){
     OpenSpaceId openSpace = new OpenSpaceId();
     openSpace.id = map['id'];
+    openSpace.name = map['name'];
     return openSpace;
   }
 }
@@ -45,11 +46,12 @@ class Room {
   OpenSpaceId openSpace;
   bool available = true;
   static dynamic convert(Map map){
-    Room openSpace = new Room();
-    openSpace.id = map['id'];
-    openSpace.description = map['description'];
-    openSpace.name = map['name'];
-    return openSpace;
+    Room room = new Room();
+    room.id = map['id'];
+    room.description = map['description'];
+    room.name = map['name'];
+    room.openSpace = OpenSpaceId.convert(map['openSpace']);
+    return room;
   }
 }
 
