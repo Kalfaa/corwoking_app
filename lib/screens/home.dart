@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:corwoking_app/screens/detail_open.dart';
 import 'package:corwoking_app/screens/reservation.dart';
 import 'package:corwoking_app/utilities/constants.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,8 @@ class Home extends StatelessWidget {
                   // needed
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: () => {print("ee")}, // needed
+                    onTap: () => { Navigator.push(  context,
+                    MaterialPageRoute(builder: (context) => DetailOpenSpaceScreen())),}, // needed
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.asset("assets/images/detailsdeslocaux.jpg"),

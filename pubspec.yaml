@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-
+  folding_cell: "^1.0.0"
   http: ^0.12.2
   flutter_secure_storage: ^3.3.4
   flushbar: ^1.10.4
