@@ -102,16 +102,6 @@ class _ListReservationScreenState extends State<ListReservationScreen> {
                   // Then close the drawer
                   //Navigator.pop(context);
 
-
-                },
-              ),
-              ListTile(
-                title: Text('Mes réservations'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
                 },
               ),
               ListTile(

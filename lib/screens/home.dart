@@ -44,7 +44,7 @@ class Home extends StatelessWidget {
               height: 18,
             ),
           Text(
-            "Bienvenue sur l'application de mobile CO'WORKING vous pouvez réservez un espace de travails ou gérer vos réservations",
+            "Bienvenue sur l'application de mobile CO'WORKING vous pouvez réserver un espace de travail ou gérer vos réservations",
             style: GoogleFonts.openSans(
                 textStyle: TextStyle(
                     color: Colors.black,

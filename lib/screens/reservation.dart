@@ -9,6 +9,8 @@ import 'package:smart_select/smart_select.dart';
 import 'package:time_range/time_list.dart';
 import 'package:time_range/time_range.dart';
 
+import 'list_reservation.dart';
+
 class ReservationScreen extends StatefulWidget {
   @override
   _Reservation createState() => _Reservation();
@@ -267,21 +269,14 @@ class _Reservation extends State<ReservationScreen> {
                 ),
               ),
               ListTile(
-                title: Text('Reserver une salle'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
                 title: Text('Mes réservations'),
                 onTap: () {
                   // Update the state of the app
                   // ...
                   // Then close the drawer
-                  Navigator.pop(context);
+                  Navigator.push(  context,
+                    MaterialPageRoute(builder: (context) => ListReservationScreen()),);
+                  //Navigator.pop(context);
                 },
               ),
               ListTile(
