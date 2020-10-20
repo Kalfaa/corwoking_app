@@ -1,6 +1,46 @@
 import 'package:corwoking_app/utilities/constants.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 
+ class HourRange{
+   int start =9;
+   int end = 21;
+
+   static dynamic convert(Map map){
+     HourRange openSpace = new HourRange();
+     openSpace.start = map['start'];
+     openSpace.end = map['end'];
+     return openSpace;
+   }
+}
+
+class OpenHour {
+  HourRange monday = new HourRange();
+  HourRange tuesday = new HourRange();
+  HourRange wednesday = new HourRange();
+  HourRange thursday = new HourRange();
+  HourRange friday = new HourRange();
+  HourRange saturday = new HourRange();
+  HourRange sunday = new HourRange();
+
+
+  static dynamic convert(Map map){
+    OpenHour openSpace = new OpenHour();
+    if(map!=null){
+      openSpace.monday = HourRange.convert(map['monday']);
+    }else{
+      return new OpenHour();
+    }
+
+    openSpace.tuesday = HourRange.convert(map['tuesday']);
+    openSpace.wednesday = HourRange.convert(map['wednesday']);
+    openSpace.thursday = HourRange.convert(map['thursday']);
+    openSpace.friday = HourRange.convert(map['friday']);
+    openSpace.saturday = HourRange.convert(map['saturday']);
+    openSpace.sunday = HourRange.convert(map['sunday']);
+    return openSpace;
+  }
+}
+
 
 class OpenSpace {
   String id;
@@ -8,6 +48,7 @@ class OpenSpace {
   String name;
   List<Room> rooms;
   List<Tool> tools;
+  OpenHour openHour;
 
   static convert(Map map){
      OpenSpace openSpace = new OpenSpace();
@@ -16,6 +57,7 @@ class OpenSpace {
      openSpace.name = map['name'];
      openSpace.rooms = new List<Room>.from(Utilities.convertArray(map['rooms'],Room.convert));
      openSpace.tools = new List<Tool>.from(Utilities.convertArray(map['tools'],Tool.convert));
+     openSpace.openHour = OpenHour.convert(map['openHours']);
      return openSpace;
   }
 

@@ -29,6 +29,7 @@ class _Reservation extends State<ReservationScreen> {
   bool showToTP = false;
   bool showRoomSelection = false;
   bool noHourAvailable = false;
+  var defaultArray = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'];
   var hourArray = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'];
   var availableHour= {8:{"available":false},9:{"available":false},10:{"available":false},11:{"available":false},12:{"available":false},13:{"available":false},14:{"available":false},
     15:{"available":false},16:{"available":false},17:{"available":false},18:{"available":false},19:{"available":false},20:{"available":false},21:{"available":false}};
@@ -74,10 +75,18 @@ class _Reservation extends State<ReservationScreen> {
         print("getAvailable");
         var availableJSON = await ReservationService.getAvailable(openSpaceSelected.id, pickeDate.toString());
         available = Available.convert(availableJSON);
+        //openSpaceSelected.openHour
+        print(pickeDate.weekday);
+
+        print(getStartHourForDay(pickeDate.weekday));
+        fromStartTP = TimeOfDay(hour: getStartHourForDay(pickeDate.weekday), minute: 00);
+        fromEndTP = TimeOfDay(hour: getEndHourForDay(pickeDate.weekday), minute: 00);
         showFromTP = true;
+
         setState(() {
 
         });
+
       };
     }
   }
@@ -308,7 +317,7 @@ class _Reservation extends State<ReservationScreen> {
     noHourAvailable = false;
     this.showRoomSelection = false;
     this.startHour = hour;
-    this.roomSelected=null;
+    this.roomSelected = null;
 
     if(available.availableHour[hour.hour.toString()] == openSpaceSelected.rooms.length){
       print("nothin");
@@ -321,12 +330,20 @@ class _Reservation extends State<ReservationScreen> {
     var possibleEnd =  findNextHourAvailable(hour.hour,available.availableHour);
 
     toStartTP = hour.add(minutes: 60);
-    toEndTP = TimeOfDay(hour: possibleEnd+1, minute: 00);
+    toEndTP = TimeOfDay(hour: min(possibleEnd,getEndHourForDay(pickeDate.weekday))+1, minute: 00);
 
     print("start"+toStartTP.toString());
     print("end"+toEndTP.toString());
     setState(() =>{});
   }
+
+  min(int n1,int n2){
+    if(n1>n2){
+      return n2;
+    }
+    return n1;
+  }
+
 
   void _endHourChanged(TimeOfDay hour) async {
     print("blabla");
@@ -497,6 +514,44 @@ class _Reservation extends State<ReservationScreen> {
           }
           return '';
         }
+
+  getStartHourForDay(int weekday) {
+    switch (weekday) {
+      case 0:
+        return this.openSpaceSelected.openHour.sunday.start;
+      case 1:
+        return this.openSpaceSelected.openHour.monday.start;
+      case 2:
+        return this.openSpaceSelected.openHour.tuesday.start;
+      case 3:
+        return this.openSpaceSelected.openHour.wednesday.start;
+      case 4:
+        return this.openSpaceSelected.openHour.thursday.start;
+      case 5:
+        return this.openSpaceSelected.openHour.friday.start;
+      case 6:
+        return this.openSpaceSelected.openHour.saturday.start;
+    }
+  }
+
+  getEndHourForDay(int weekday) {
+    switch (weekday) {
+      case 0:
+        return this.openSpaceSelected.openHour.sunday.end;
+      case 1:
+        return this.openSpaceSelected.openHour.monday.end;
+      case 2:
+        return this.openSpaceSelected.openHour.tuesday.end;
+      case 3:
+        return this.openSpaceSelected.openHour.wednesday.end;
+      case 4:
+        return this.openSpaceSelected.openHour.thursday.end;
+      case 5:
+        return this.openSpaceSelected.openHour.friday.end;
+      case 6:
+        return this.openSpaceSelected.openHour.saturday.end;
+    }
+  }
 }
 
 
