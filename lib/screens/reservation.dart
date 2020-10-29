@@ -29,8 +29,8 @@ class _Reservation extends State<ReservationScreen> {
   bool showToTP = false;
   bool showRoomSelection = false;
   bool noHourAvailable = false;
-  var defaultArray = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'];
-  var hourArray = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'];
+  var defaultArray = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00','22:00','23:00'];
+  var hourArray = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00','22:00','23:00'];
   var availableHour= {8:{"available":false},9:{"available":false},10:{"available":false},11:{"available":false},12:{"available":false},13:{"available":false},14:{"available":false},
     15:{"available":false},16:{"available":false},17:{"available":false},18:{"available":false},19:{"available":false},20:{"available":false},21:{"available":false}};
 
@@ -58,10 +58,11 @@ class _Reservation extends State<ReservationScreen> {
 
 
   _pickDate() async {
-    pickeDate = DateTime.now();
+    var tommorow = DateTime.now().add(new Duration(days: 1));
+    pickeDate = tommorow;
     DateTime date = await showDatePicker(
       context: context,
-      firstDate: DateTime.now(),
+      firstDate:tommorow,
       lastDate: DateTime(DateTime.now().year+2),
       initialDate:pickeDate,
     );
@@ -459,12 +460,11 @@ class _Reservation extends State<ReservationScreen> {
     try {
       await ReservationService.create(reservationCreation.toJson());
       Navigator.pop(context);
-      Navigator.pop(context);
       FlushBarMessage.goodMessage(content: "Reservation effectué").showFlushBar(context);
 
     }catch  (exception) {
       print(exception);
-      FlushBarMessage.errorMessage(content: "Erreur lors de l'inscription").showFlushBar(context);
+      FlushBarMessage.errorMessage(content: "Erreur lors de la reservation").showFlushBar(context);
     }
   }
 
