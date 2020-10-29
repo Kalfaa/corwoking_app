@@ -65,9 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
         var token = user['token']['access_token'];
         await storage.write(key: "token", value: "Bearer " + token);
         FlushBarMessage.goodMessage(content: 'connection reussis').showFlushBar(context);
-        Navigator.pushAndRemoveUntil(
+        Navigator.pushNamedAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (BuildContext context) => Home(title: 'Coworking')),
+            'main',
                 (Route<dynamic> route) => false);
       } catch (e) {
         print(e);

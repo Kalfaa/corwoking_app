@@ -284,18 +284,10 @@ class _Reservation extends State<ReservationScreen> {
                   // Update the state of the app
                   // ...
                   // Then close the drawer
+                  Navigator.popUntil(context,ModalRoute.withName('main'));
                   Navigator.push(  context,
                     MaterialPageRoute(builder: (context) => ListReservationScreen()),);
                   //Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('Mon compte'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
                 },
               ),
             ],
@@ -459,7 +451,7 @@ class _Reservation extends State<ReservationScreen> {
     reservationCreation.tools = pickSomeToolToReserve((pcNumber).toInt(),(printerNumber).toInt(),availableTool);
     try {
       await ReservationService.create(reservationCreation.toJson());
-      Navigator.pop(context);
+      Navigator.popUntil(context,ModalRoute.withName('main'));
       FlushBarMessage.goodMessage(content: "Reservation effectué").showFlushBar(context);
 
     }catch  (exception) {

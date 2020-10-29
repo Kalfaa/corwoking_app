@@ -193,7 +193,8 @@ class _EditReservationScreenState extends State<EditReservationScreen> {
             onTap: () {
               // Update the state of the app
               // ...
-              print('eee');
+              Navigator.popUntil(context,ModalRoute.withName('main'));
+
               Navigator.push(  context,
                 MaterialPageRoute(builder: (context) => ReservationScreen()),);
               // Then close the drawer
@@ -207,18 +208,11 @@ class _EditReservationScreenState extends State<EditReservationScreen> {
               // Update the state of the app
               // ...
               // Then close the drawer
+              Navigator.popUntil(context,ModalRoute.withName('main'));
+
               Navigator.push(  context,
                 MaterialPageRoute(builder: (context) => ListReservationScreen()),);
               //Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Text('Mon compte'),
-            onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
             },
           ),
         ],

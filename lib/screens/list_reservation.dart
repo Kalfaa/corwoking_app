@@ -97,20 +97,13 @@ class _ListReservationScreenState extends State<ListReservationScreen> {
                   // Update the state of the app
                   // ...
                   print('eee');
+                  Navigator.popUntil(context,ModalRoute.withName('main'));
+
                   Navigator.push(  context,
                     MaterialPageRoute(builder: (context) => ReservationScreen()),);
                   // Then close the drawer
                   //Navigator.pop(context);
 
-                },
-              ),
-              ListTile(
-                title: Text('Mon compte'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
                 },
               ),
             ],

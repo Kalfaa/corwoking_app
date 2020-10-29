@@ -1,3 +1,4 @@
+import 'package:corwoking_app/screens/home.dart';
 import 'package:corwoking_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -12,6 +13,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Login UI',
       debugShowCheckedModeBanner: false,
       home: LoginScreen(),
+      routes: {
+        'main':(_)=> Home(title: 'Coworking')
+      },
     );
   }
 }

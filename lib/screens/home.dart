@@ -137,21 +137,13 @@ class Home extends StatelessWidget {
             ListTile(
               title: Text('Mes réservations'),
               onTap: () {
+                
                 // Update the state of the app
                 // ...
                 // Then close the drawer
                 Navigator.push(  context,
                   MaterialPageRoute(builder: (context) => ListReservationScreen()),);
                 //Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Mon compte'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
               },
             ),
           ],
