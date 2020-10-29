@@ -137,7 +137,7 @@ class Home extends StatelessWidget {
             ListTile(
               title: Text('Mes réservations'),
               onTap: () {
-                
+
                 // Update the state of the app
                 // ...
                 // Then close the drawer

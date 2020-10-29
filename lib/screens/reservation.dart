@@ -33,17 +33,16 @@ class _Reservation extends State<ReservationScreen> {
   var hourArray = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00','22:00','23:00'];
   var availableHour= {8:{"available":false},9:{"available":false},10:{"available":false},11:{"available":false},12:{"available":false},13:{"available":false},14:{"available":false},
     15:{"available":false},16:{"available":false},17:{"available":false},18:{"available":false},19:{"available":false},20:{"available":false},21:{"available":false}};
-
   var pcNumber = 0.0;
   var printerNumber = 0.0;
-
+  bool complete = false;
   TimeOfDay fromStartTP = TimeOfDay(hour: 8, minute: 00);
-  TimeOfDay fromEndTP = TimeOfDay(hour: 21, minute: 00);
+  TimeOfDay fromEndTP = TimeOfDay(hour: 23, minute: 00);
   TimeOfDay startHour;
   TimeOfDay endHour;
 
   TimeOfDay toStartTP = TimeOfDay(hour: 8, minute: 00);
-  TimeOfDay toEndTP = TimeOfDay(hour: 21, minute: 00);
+  TimeOfDay toEndTP = TimeOfDay(hour: 23, minute: 00);
 
   var foodNumber = 0.0;
 
@@ -53,8 +52,40 @@ class _Reservation extends State<ReservationScreen> {
     super.initState();
     //pickeDate = DateTime.now();
     _getOpenSpace();
-  }
 
+  }
+  refresh() async {
+    if(complete==true){
+      complete = false;
+      showFromTP = false;
+      pickeDate = null;
+      showToTP=false;
+      showRoomSelection = false;
+      setState(() {
+
+      });
+    }
+    if (pickeDate != null) {
+      if (openSpaceSelected != null) {
+        print("getAvailable");
+        var availableJSON = await ReservationService.getAvailable(
+            openSpaceSelected.id, pickeDate.toString());
+        available = Available.convert(availableJSON);
+        //openSpaceSelected.openHour
+        print(pickeDate.weekday);
+        print(getStartHourForDay(pickeDate.weekday));
+        fromStartTP = TimeOfDay(hour: getStartHourForDay(pickeDate.weekday), minute: 00);
+        fromEndTP = TimeOfDay(hour: getEndHourForDay(pickeDate.weekday), minute: 00);
+        showFromTP = true;
+        complete = true;
+        setState(() {
+          print(getStartHourForDay(pickeDate.weekday));
+          print(getEndHourForDay(pickeDate.weekday));
+        });
+
+      };
+    }
+  }
 
 
   _pickDate() async {
@@ -67,6 +98,16 @@ class _Reservation extends State<ReservationScreen> {
       initialDate:pickeDate,
     );
 
+    if(complete==true){
+      complete = false;
+      showFromTP = false;
+      openSpaceSelected = null;
+      showToTP=false;
+      showRoomSelection = false;
+      setState(() {
+
+      });
+    }
 
     if(date != null){
       setState((){
@@ -76,21 +117,22 @@ class _Reservation extends State<ReservationScreen> {
         print("getAvailable");
         var availableJSON = await ReservationService.getAvailable(openSpaceSelected.id, pickeDate.toString());
         available = Available.convert(availableJSON);
-        //openSpaceSelected.openHour
-        print(pickeDate.weekday);
-
-        print(getStartHourForDay(pickeDate.weekday));
         fromStartTP = TimeOfDay(hour: getStartHourForDay(pickeDate.weekday), minute: 00);
         fromEndTP = TimeOfDay(hour: getEndHourForDay(pickeDate.weekday), minute: 00);
         showFromTP = true;
-
-        setState(() {
-
+        complete = true;
+        setState((){
+            print(getStartHourForDay(pickeDate.weekday));
+            print(getEndHourForDay(pickeDate.weekday));
         });
 
       };
     }
   }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +143,9 @@ class _Reservation extends State<ReservationScreen> {
           child:SmartSelect<OpenSpace>.single(
             title: 'Openspace',
             value: openSpaceSelected,
+            placeholder: 'Choisissez un openSpace',
             choiceItems: options,
-            onChange: (state) => setState(()  {openSpaceSelected = state.value;})
+            onChange: (state) => setState(()  {openSpaceSelected = state.value;refresh();})
         ),
           ),
           Flexible(
@@ -118,9 +161,7 @@ class _Reservation extends State<ReservationScreen> {
                 Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Text('Date de début', style: TextStyle(fontSize: 18, color: Colors.grey),),
-              ),
-                SizedBox(height: 8),
-                TimeList(
+              ),TimeList(
                   firstTime: fromStartTP,
                   lastTime: fromEndTP,
                   timeStep: 60,
@@ -132,7 +173,9 @@ class _Reservation extends State<ReservationScreen> {
                   activeBackgroundColor: Colors.orange,
                   textStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.black87),
                   activeTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                )
+                  ),
+                SizedBox(height: 8),
+
           ])),
 
           Visibility(
@@ -311,7 +354,8 @@ class _Reservation extends State<ReservationScreen> {
     this.showRoomSelection = false;
     this.startHour = hour;
     this.roomSelected = null;
-
+    pcNumber = 0;
+    printerNumber = 0;
     if(available.availableHour[hour.hour.toString()] == openSpaceSelected.rooms.length){
       print("nothin");
       noHourAvailable = true;
@@ -340,6 +384,8 @@ class _Reservation extends State<ReservationScreen> {
 
   void _endHourChanged(TimeOfDay hour) async {
     print("blabla");
+    pcNumber = 0;
+    printerNumber = 0;
     this.roomOption = [];
     this.endHour = hour;
     availableRoom = this.getAvailableRoom();
@@ -357,14 +403,14 @@ class _Reservation extends State<ReservationScreen> {
 
   findNextHourAvailable(start,availableHour) {
     start++;
-    while(start<21){
+    while(start<23){
 
       if(available.availableHour[start.toString()] == openSpaceSelected.rooms.length){
         return start;
       }
       start++;
     }
-    return 21;
+    return 23;
   }
 
   List<Room> getAvailableRoom(){
